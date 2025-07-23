@@ -1,0 +1,451 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\kleve\OneDrive\Área de Trabalho\Lucas\11 jul - 2022\projecao.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}29 Jul 2022, 15:08:26
+{txt}
+{com}. 
+.  /* --------------------------- preparacao dos dados -------------------------------------*/
+. 
+.          
+.  *Definindo dados em mensal
+. 
+. *generate data1= monthly(data,"YM")
+. 
+. *data importada para o stata como 2005m1
+. 
+. format %tm data1
+{txt}
+{com}. 
+. tsset data1
+{res}{txt}{col 9}time variable:  {res}{col 25}data1, 2010m5 to 2021m9
+{txt}{col 17}delta:  {res}1 month
+{txt}
+{com}. // Normalizando variÃ¡veis em z-scores
+.  
+.  ***********************************
+.  *metodologia seguindo o Bacen
+.  ***********************************
+.  gen lnibc = ln(IBC_BR[_n])- ln(IBC_BR[_n-1])
+{txt}(1 missing value generated)
+
+{com}. 
+.  
+. 
+.  *================================================
+.  *Criando as variaveis 
+.  *==================================================
+. 
+.  gen FCIbacenmdia= fcibacenmdia 
+{txt}(45 missing values generated)
+
+{com}.  
+. 
+. dfuller lnibc 
+
+{txt}Dickey-Fuller test for unit root                   Number of obs   = {res}      135
+
+{txt}{col 32}{hline 10} Interpolated Dickey-Fuller {hline 9}
+                  Test         1% Critical       5% Critical      10% Critical
+               Statistic           Value             Value             Value
+{hline 78}
+ Z(t)         {res}   -14.731            -3.498            -2.888            -2.578
+{txt}{hline 78}
+MacKinnon approximate p-value for Z(t) = {res}0.0000
+{txt}
+{com}.  
+. dfuller indice3a
+
+{txt}Dickey-Fuller test for unit root                   Number of obs   = {res}      136
+
+{txt}{col 32}{hline 10} Interpolated Dickey-Fuller {hline 9}
+                  Test         1% Critical       5% Critical      10% Critical
+               Statistic           Value             Value             Value
+{hline 78}
+ Z(t)         {res}     1.830            -3.498            -2.888            -2.578
+{txt}{hline 78}
+MacKinnon approximate p-value for Z(t) = {res}0.9984
+{txt}
+{com}. dfuller d.indice3a
+
+{txt}Dickey-Fuller test for unit root                   Number of obs   = {res}      135
+
+{txt}{col 32}{hline 10} Interpolated Dickey-Fuller {hline 9}
+                  Test         1% Critical       5% Critical      10% Critical
+               Statistic           Value             Value             Value
+{hline 78}
+ Z(t)         {res}   -10.595            -3.498            -2.888            -2.578
+{txt}{hline 78}
+MacKinnon approximate p-value for Z(t) = {res}0.0000
+{txt}
+{com}. 
+. dfuller FCIbacenmdia
+
+{txt}Dickey-Fuller test for unit root                   Number of obs   = {res}       91
+
+{txt}{col 32}{hline 10} Interpolated Dickey-Fuller {hline 9}
+                  Test         1% Critical       5% Critical      10% Critical
+               Statistic           Value             Value             Value
+{hline 78}
+ Z(t)         {res}    -3.282            -3.523            -2.897            -2.584
+{txt}{hline 78}
+MacKinnon approximate p-value for Z(t) = {res}0.0157
+{txt}
+{com}. dfuller d.FCIbacenmdia
+
+{txt}Dickey-Fuller test for unit root                   Number of obs   = {res}       90
+
+{txt}{col 32}{hline 10} Interpolated Dickey-Fuller {hline 9}
+                  Test         1% Critical       5% Critical      10% Critical
+               Statistic           Value             Value             Value
+{hline 78}
+ Z(t)         {res}    -8.226            -3.524            -2.898            -2.584
+{txt}{hline 78}
+MacKinnon approximate p-value for Z(t) = {res}0.0000
+{txt}
+{com}. *seleção de lags pelo eviws pelo critério de informação 
+. 
+. *****************************
+. *ESTIMANDO UM VAR AUXILIAR
+. ****************************
+. 
+. regress d.lnibc d.l.lnibc d.l.FCIbacenmdi
+
+      {txt}Source {c |}       SS       df       MS              Number of obs ={res}      90
+{txt}{hline 13}{char +}{hline 30}           F(  2,    87) ={res}   13.72
+    {txt}   Model {char |} {res} .069926409     2  .034963205           {txt}Prob > F      = {res} 0.0000
+    {txt}Residual {char |} {res}  .22168153    87  .002548064           {txt}R-squared     = {res} 0.2398
+{txt}{hline 13}{char +}{hline 30}           Adj R-squared = {res} 0.2223
+    {txt}   Total {char |} {res} .291607939    89  .003276494           {txt}Root MSE      = {res} .05048
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     D.lnibc{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lnibc {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2}-.4804422{col 26}{space 2} .0933231{col 37}{space 1}   -5.15{col 46}{space 3}0.000{col 54}{space 4}-.6659318{col 67}{space 3}-.2949525
+{txt}{space 12} {c |}
+FCIbacenmdia {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2}-.0097436{col 26}{space 2} .0100747{col 37}{space 1}   -0.97{col 46}{space 3}0.336{col 54}{space 4}-.0297683{col 67}{space 3}  .010281
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-.0009579{col 26}{space 2} .0053253{col 37}{space 1}   -0.18{col 46}{space 3}0.858{col 54}{space 4}-.0115425{col 67}{space 3} .0096268
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. 
+.  predict Y_est1, xb
+{txt}(47 missing values generated)
+
+{com}. 
+.  
+.  predict erro, r
+{txt}(47 missing values generated)
+
+{com}.  vif 
+
+{txt}    Variable {c |}       VIF       1/VIF  
+{hline 13}{c +}{hline 22}
+FCIbacenmdia {c |}
+{space 9}LD. {c |} {res}     1.00    1.000000
+{txt}{space 7}lnibc {c |}
+{space 9}LD. {c |} {res}     1.00    1.000000
+{txt}{hline 13}{c +}{hline 22}
+    Mean VIF {c |} {res}     1.00
+{txt}
+{com}.  estat hettest 
+
+{txt}Breusch-Pagan / Cook-Weisberg test for heteroskedasticity 
+         Ho: Constant variance
+{p 9 20}Variables: fitted values of D.lnibc
+
+{col 10}chi2({res}1{txt}){col 23}={res}     6.84
+{txt}{col 10}Prob > chi2{col 23}={res}   0.0089
+{txt}
+{com}.  whitetst 
+{txt}(3 missing values generated)
+(47 missing values generated)
+(3 missing values generated)
+(47 missing values generated)
+(47 missing values generated)
+
+White's general test statistic : {res} 26.18958{txt}  Chi-sq( 5)  P-value = {res} 8.2e-05
+{txt}
+{com}.   estat dwatson
+
+{txt}Durbin-Watson d-statistic({res}  3{txt},{res}    90{txt}) = {res} 2.425346
+{txt}
+{com}.     predict erro1, residual
+{txt}(47 missing values generated)
+
+{com}.   
+. swilk erro1
+
+                   {txt}Shapiro-Wilk W test for normal data
+
+    Variable {c |}    Obs{col 29}W{col 41}V{col 51}z       Prob>z
+{hline 13}{c +}{hline 50}
+       erro1 {c |}{res}     90    0.98564      1.086     0.182    0.42789
+{txt}
+{com}. 
+. *h0: distribuição normal
+. 
+. *se P < 0,05 enão o dado não é normalmente distribuido 
+. 
+. 
+. sktest erro1
+{res}
+{col 21}{txt}Skewness/Kurtosis tests for Normality
+{col 58}{hline 7} joint {hline 6}
+{col 5}Variable {c |}    Obs   Pr(Skewness)   Pr(Kurtosis)  adj chi2(2)    Prob>chi2
+{hline 13}{c +}{hline 63}
+       erro1 {c |}{res}{col 17}   90{col 28}0.3093{col 43}0.6331{col 53}     1.29{col 71}0.5239
+{txt}
+{com}.  
+. 
+. regress d.lnibc d.l.lnibc d.l.indice3a 
+
+      {txt}Source {c |}       SS       df       MS              Number of obs ={res}     134
+{txt}{hline 13}{char +}{hline 30}           F(  2,   131) ={res}   24.03
+    {txt}   Model {char |} {res} .109627511     2  .054813755           {txt}Prob > F      = {res} 0.0000
+    {txt}Residual {char |} {res} .298863613   131  .002281402           {txt}R-squared     = {res} 0.2684
+{txt}{hline 13}{char +}{hline 30}           Adj R-squared = {res} 0.2572
+    {txt}   Total {char |} {res} .408491124   133  .003071362           {txt}Root MSE      = {res} .04776
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     D.lnibc{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lnibc {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2}-.4798895{col 26}{space 2} .0752128{col 37}{space 1}   -6.38{col 46}{space 3}0.000{col 54}{space 4}-.6286783{col 67}{space 3}-.3311007
+{txt}{space 12} {c |}
+{space 4}indice3a {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2}  .002707{col 26}{space 2} .0014605{col 37}{space 1}    1.85{col 46}{space 3}0.066{col 54}{space 4}-.0001823{col 67}{space 3} .0055963
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-.0039658{col 26}{space 2} .0045324{col 37}{space 1}   -0.87{col 46}{space 3}0.383{col 54}{space 4} -.012932{col 67}{space 3} .0050004
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. 
+.  
+.  predict Y_est2, xb
+{txt}(3 missing values generated)
+
+{com}. 
+.  predict erro2, r
+{txt}(3 missing values generated)
+
+{com}. 
+. 
+. 
+. *************************
+. *TESTES 
+. **************************
+. /* teste de multicolineariedade*/ 
+. vif
+
+{txt}    Variable {c |}       VIF       1/VIF  
+{hline 13}{c +}{hline 22}
+{space 4}indice3a {c |}
+{space 9}LD. {c |} {res}     1.02    0.982949
+{txt}{space 7}lnibc {c |}
+{space 9}LD. {c |} {res}     1.02    0.982949
+{txt}{hline 13}{c +}{hline 22}
+    Mean VIF {c |} {res}     1.02
+{txt}
+{com}. /*se 1/vif for perto de 1 não tem multicolineariedade ou se o valor for maior que 10 VIF então a variavel tem multicolineariedade*/
+. *Caso tenha multicolineariedade pode usar diferenças
+. 
+. *regress TPR inad corte Emprego renda2 habitantes Fatura2 ImpactoFaturaDespesas impactoBSRenda kWh LF 
+. 
+. 
+. *================================================================================
+. * Heterocedasticidade
+. *===============================================================================
+.  
+. 
+.     estat hettest    
+
+{txt}Breusch-Pagan / Cook-Weisberg test for heteroskedasticity 
+         Ho: Constant variance
+{p 9 20}Variables: fitted values of D.lnibc
+
+{col 10}chi2({res}1{txt}){col 23}={res}     3.57
+{txt}{col 10}Prob > chi2{col 23}={res}   0.0589
+{txt}
+{com}.         *tests for heteroskedasticity
+.         
+.         /* menor que 0.05 aceita a hipotese de HETEROCEDASTICIDADE (Presence of heteroskedasticity)  */ 
+. 
+. whitetst 
+{txt}(3 missing values generated)
+(2 missing values generated)
+(3 missing values generated)
+(3 missing values generated)
+(2 missing values generated)
+
+White's general test statistic : {res} 10.24429{txt}  Chi-sq( 5)  P-value = {res} .0686
+{txt}
+{com}.         *tests for heteroskedasticity
+.         
+.         /* menor que 0.05 aceita a hipotese de HETEROCEDASTICIDADE (Presence of heteroskedasticity)  */ 
+. 
+.                 
+. *==============================================================================
+. * Teste Para Séries Temporais - D
+. *==============================================================================
+.  estat dwatson
+
+{txt}Durbin-Watson d-statistic({res}  3{txt},{res}   134{txt}) = {res} 2.470217
+{txt}
+{com}.  *analisar pela tabela DW
+.  
+.  
+.   *=====================================
+.   *Distribuição do erro 
+.   *======================================
+.   
+.   *Roda a regressão
+.   
+.  
+.   
+. swilk erro2
+
+                   {txt}Shapiro-Wilk W test for normal data
+
+    Variable {c |}    Obs{col 29}W{col 41}V{col 51}z       Prob>z
+{hline 13}{c +}{hline 50}
+       erro2 {c |}{res}    134    0.99126      0.924    -0.179    0.57115
+{txt}
+{com}. 
+. *h0: distribuição normal
+. 
+. *se P < 0,05 enão o dado não é normalmente distribuido 
+. 
+. 
+. sktest erro2
+{res}
+{col 21}{txt}Skewness/Kurtosis tests for Normality
+{col 58}{hline 7} joint {hline 6}
+{col 5}Variable {c |}    Obs   Pr(Skewness)   Pr(Kurtosis)  adj chi2(2)    Prob>chi2
+{hline 13}{c +}{hline 63}
+       erro2 {c |}{res}{col 17}  134{col 28}0.8944{col 43}0.4526{col 53}     0.59{col 71}0.7448
+{txt}
+{com}. 
+. *h0: distribuição normal
+. 
+. *se P < 0,05 enão o dado não é normalmente distribuido 
+. 
+. 
+. * JB Grande Amostras
+. jb6 erro2
+{txt}Jarque-Bera normality test: {res} .2424 {txt}Chi({res}2{txt}) {res} .8859
+{txt}Jarque-Bera test for Ho: normality: ({res}erro2{txt})
+
+{com}. 
+. *Ho: Normalidade
+. 
+. * A estatistica JB apresenta a probabilidade de normalidade, dado a estatistica Qui-quadrada
+. *se P < 0,05 enão o dado não é normalmente distribuido 
+. 
+. gr7  erro2,  hist  xlabel  ylabel  bin(10)  normal  freq
+{txt}
+{com}. gr7  erro1,  hist  xlabel  ylabel  bin(10)  normal  freq
+{txt}
+{com}. 
+.  
+.  *******************
+.  *MOdelo final 
+.  regress d.lnibc d.l.lnibc d.l.FCIbacenmdi, vce(robust)
+
+{txt}Linear regression                                      Number of obs ={res}      90
+                                                       {txt}F(  2,    87) ={res}    9.49
+                                                       {txt}Prob > F      = {res} 0.0002
+                                                       {txt}R-squared     = {res} 0.2398
+                                                       {txt}Root MSE      = {res} .05048
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}     D.lnibc{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lnibc {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2}-.4804422{col 26}{space 2} .1116046{col 37}{space 1}   -4.30{col 46}{space 3}0.000{col 54}{space 4}-.7022683{col 67}{space 3} -.258616
+{txt}{space 12} {c |}
+FCIbacenmdia {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2}-.0097436{col 26}{space 2} .0146738{col 37}{space 1}   -0.66{col 46}{space 3}0.508{col 54}{space 4}-.0389094{col 67}{space 3} .0194221
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-.0009579{col 26}{space 2} .0054133{col 37}{space 1}   -0.18{col 46}{space 3}0.860{col 54}{space 4}-.0117174{col 67}{space 3} .0098016
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}.   predict erro3, r
+{txt}(47 missing values generated)
+
+{com}.   gen erro3_2 = erro3^2 
+{txt}(47 missing values generated)
+
+{com}.   
+. regress d.lnibc d.l.lnibc d.l.indice3a, vce(robust)
+
+{txt}Linear regression                                      Number of obs ={res}     134
+                                                       {txt}F(  2,   131) ={res}   24.96
+                                                       {txt}Prob > F      = {res} 0.0000
+                                                       {txt}R-squared     = {res} 0.2684
+                                                       {txt}Root MSE      = {res} .04776
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}     D.lnibc{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lnibc {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2}-.4798895{col 26}{space 2} .0819764{col 37}{space 1}   -5.85{col 46}{space 3}0.000{col 54}{space 4}-.6420585{col 67}{space 3}-.3177206
+{txt}{space 12} {c |}
+{space 4}indice3a {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2}  .002707{col 26}{space 2} .0015577{col 37}{space 1}    1.74{col 46}{space 3}0.085{col 54}{space 4}-.0003745{col 67}{space 3} .0057885
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-.0039658{col 26}{space 2} .0043116{col 37}{space 1}   -0.92{col 46}{space 3}0.359{col 54}{space 4}-.0124951{col 67}{space 3} .0045636
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}.  predict erro4, r
+{txt}(3 missing values generated)
+
+{com}.   gen erro4_2 = erro4^2 
+{txt}(3 missing values generated)
+
+{com}. 
+.   mean erro4_2 erro3_2
+{res}
+{txt}Mean estimation{col 37}Number of obs{col 54}= {res}     90
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 14}{hline 12}
+{col 14}{c |}       Mean{col 26}   Std. Err.{col 38}     [95% Con{col 51}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 14}{hline 12}
+{space 5}erro4_2 {c |}{col 14}{res}{space 2}  .002372{col 26}{space 2} .0003844{col 37}{space 5} .0016083{col 51}{space 3} .0031358
+{txt}{space 5}erro3_2 {c |}{col 14}{res}{space 2} .0024631{col 26}{space 2} .0003756{col 37}{space 5} .0017168{col 51}{space 3} .0032094
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 14}{hline 12}
+
+{com}. 
+.   
+.   *REQM
+.   gen bacen = 0.0024631^(0.5)
+{txt}
+{com}.   gen proposta = 0.002372^(0.5)
+{txt}
+{com}.  *erro4_2       0.002372(proposta)
+.  *erro3_2       0.0024631 (bacen)
+.  
+.   gen dlnibc = d.lnibc
+{txt}(2 missing values generated)
+
+{com}.    gen bc_proj = Y_est1
+{txt}(47 missing values generated)
+
+{com}.   gen prop_proj = Y_est2
+{txt}(3 missing values generated)
+
+{com}. 
+.  log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\kleve\OneDrive\Área de Trabalho\Lucas\11 jul - 2022\projecao.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}29 Jul 2022, 15:08:26
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

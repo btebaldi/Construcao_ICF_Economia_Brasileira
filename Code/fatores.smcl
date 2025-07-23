@@ -1,0 +1,1212 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\kleve\OneDrive\Área de Trabalho\Lucas\11 jul - 2022\fatores.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}29 Jul 2022, 14:45:00
+{txt}
+{com}. 
+.  /* --------------------------- preparacao dos dados -------------------------------------*/
+. 
+.          
+.  *Definindo dados em mensal
+. 
+. generate data1= monthly(data,"YM")
+{txt}
+{com}. 
+. *data importada para o stata como 2005m1
+. 
+. format %tm data1
+{txt}
+{com}. 
+. tsset data1
+{res}{txt}{col 9}time variable:  {res}{col 25}data1, 2010m5 to 2021m9
+{txt}{col 17}delta:  {res}1 month
+{txt}
+{com}. // Normalizando variÃ¡veis em z-scores
+.  
+.  
+. 
+. 
+. 
+.    
+.   foreach var of varlist BaseM_SA M1 M2 M3 M4 ROE RegCap DemDep_SA DIPre_1 CDS_5 Ibovespa_SA DowJonesIndex_SA NasdaqComposite_SA SP500_SA FTSE100_SA Nikkei225_SA VOLY DolarPtaxVenda REER_IPCA VIX J_5Y J_10Y J_30Y DXYajus{c -(}
+{txt}  2{com}.  egen `var'_std = std(`var') 
+{txt}  3{com}.    
+.  
+.  {c )-}
+{txt}
+{com}.    *
+. 
+.  
+.   
+.  // Criando fatores
+. 
+. /* --------------------------- Analise Fatorial  -------------------------------------*/
+. * 1-Uniqueness = comunalidade
+. 
+. *Análise fatorial
+. 
+. * Average interitem covariance
+. 
+. *TODOS
+. alpha BaseM_SA_std      M1_std  M2_std  M3_std  M4_std ROE_std  RegCap_std      DemDep_SA_std DIPre_1_std CDS_5_std Ibovespa_SA_std     DowJonesIndex_SA_std NasdaqComposite_SA_std SP500_SA_std FTSE100_SA_std Nikkei225_SA_std VOLY_std DolarPtaxVenda_std REER_IPCA_std VIX_std      J_5Y_std J_10Y_std J_30Y_std DXYajus_std, item
+
+{txt}Test scale = mean(unstandardized items)
+
+                                                            average
+                             item-test     item-rest       interitem
+Item         {c |}  Obs  Sign   correlation   correlation     covariance      alpha
+{hline 13}{c +}{hline 65}
+BaseM_SA_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.8831{col 45} 0.8670{col 59} .3467944{col 73} 0.9243
+{txt}M1_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9349{col 45} 0.9256{col 59} .3437327{col 73} 0.9234
+{txt}M2_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9598{col 45} 0.9540{col 59} .3422573{col 73} 0.9229
+{txt}M3_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9309{col 45} 0.9211{col 59}  .343965{col 73} 0.9234
+{txt}M4_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9265{col 45} 0.9161{col 59} .3442276{col 73} 0.9235
+{txt}ROE_std{col 14}{c |}{res}{col 16} 137{col 24}-{col 31} 0.1069{col 45} 0.0402{col 59} .3927041{col 73} 0.9370
+{txt}RegCap_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.0618{col 45}-0.0051{col 59}  .395372{col 73} 0.9377
+{txt}DemDep_SA_~d{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.1836{col 45} 0.1179{col 59} .3881679{col 73} 0.9359
+{txt}DIPre_1_std{col 14}{c |}{res}{col 16} 137{col 24}-{col 31} 0.6509{col 45} 0.6098{col 59} .3605275{col 73} 0.9284
+{txt}CDS_5_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.2398{col 45} 0.1754{col 59} .3848414{col 73} 0.9350
+{txt}Ibovespa_S~d{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.2392{col 45} 0.1748{col 59} .3848774{col 73} 0.9350
+{txt}DowJonesIn~d{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.8601{col 45} 0.8411{col 59} .3481537{col 73} 0.9247
+{txt}NasdaqComp~d{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9426{col 45} 0.9344{col 59} .3432768{col 73} 0.9232
+{txt}SP500_SA_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9010{col 45} 0.8872{col 59} .3457349{col 73} 0.9240
+{txt}FTSE100_SA~d{col 14}{c |}{res}{col 16} 137{col 24}-{col 31} 0.2456{col 45} 0.1813{col 59} .3845003{col 73} 0.9349
+{txt}Nikkei225_~d{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.7980{col 45} 0.7716{col 59} .3518302{col 73} 0.9258
+{txt}VOLY_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.4149{col 45} 0.3573{col 59} .3744852{col 73} 0.9323
+{txt}DolarPtaxV~d{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9228{col 45} 0.9119{col 59} .3444482{col 73} 0.9236
+{txt}REER_IPCA_~d{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9555{col 45} 0.9491{col 59} .3425125{col 73} 0.9230
+{txt}VIX_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.3002{col 45} 0.2377{col 59} .3812673{col 73} 0.9341
+{txt}J_5Y_std{col 14}{c |}{res}{col 16} 137{col 24}-{col 31} 0.3510{col 45} 0.2904{col 59}  .378263{col 73} 0.9333
+{txt}J_10Y_std{col 14}{c |}{res}{col 16} 137{col 24}-{col 31} 0.7084{col 45} 0.6727{col 59} .3571241{col 73} 0.9274
+{txt}J_30Y_std{col 14}{c |}{res}{col 16} 137{col 24}-{col 31} 0.8474{col 45} 0.8269{col 59} .3489038{col 73} 0.9250
+{txt}DXYajus_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.5986{col 45} 0.5530{col 59} .3636231{col 73} 0.9293
+{txt}{hline 13}{c +}{hline 65}
+Test scale{col 14}{c |}{res}{col 59} .3621496{col 73} 0.9316
+{txt}{hline 13}{c BT}{hline 65}
+
+{com}. 
+. *Agregado Monetário
+. alpha BaseM_SA_std      M1_std  M2_std  M3_std  M4_std, item
+
+{txt}Test scale = mean(unstandardized items)
+
+                                                            average
+                             item-test     item-rest       interitem
+Item         {c |}  Obs  Sign   correlation   correlation     covariance      alpha
+{hline 13}{c +}{hline 65}
+BaseM_SA_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.8856{col 45} 0.8246{col 59} .9562854{col 73} 0.9887
+{txt}M1_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9745{col 45} 0.9597{col 59} .8852983{col 73} 0.9686
+{txt}M2_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9934{col 45} 0.9895{col 59} .8701907{col 73} 0.9640
+{txt}M3_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9710{col 45} 0.9542{col 59} .8880702{col 73} 0.9695
+{txt}M4_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9674{col 45} 0.9485{col 59} .8909945{col 73} 0.9703
+{txt}{hline 13}{c +}{hline 65}
+Test scale{col 14}{c |}{res}{col 59} .8981678{col 73} 0.9778
+{txt}{hline 13}{c BT}{hline 65}
+
+{com}. 
+. *Crédito
+. alpha  ROE_std RegCap_std DemDep_SA_std, item
+
+{txt}Test scale = mean(unstandardized items)
+
+                                                            average
+                             item-test     item-rest       interitem
+Item         {c |}  Obs  Sign   correlation   correlation     covariance      alpha
+{hline 13}{c +}{hline 65}
+ROE_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.5695{col 45} 0.0539{col 59} .2289055{col 73} 0.3725
+{txt}RegCap_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.7394{col 45} 0.3033{col 59}-.0946194{col 73}      .
+{txt}DemDep_SA_~d{col 14}{c |}{res}{col 16} 137{col 24}-{col 31} 0.5956{col 45} 0.0874{col 59} .1791635{col 73} 0.3039
+{txt}{hline 13}{c +}{hline 65}
+Test scale{col 14}{c |}{res}{col 59} .1044832{col 73} 0.2593
+{txt}{hline 13}{c BT}{hline 65}
+
+{com}. 
+. *Custo de Oportunidade
+. alpha  DIPre_1_std  CDS_5_std, item
+
+{txt}Test scale = mean(unstandardized items)
+
+Average interitem covariance:{col 34}{res} .3710119
+{txt}Number of items in the scale:{col 34}{res}        2
+{txt}Scale reliability coefficient:{col 34}{res}   0.5412
+{txt}
+{com}. 
+. *Mercado de Capitais
+. alpha Ibovespa_SA_std DowJonesIndex_SA_std NasdaqComposite_SA_std SP500_SA_std FTSE100_SA_std Nikkei225_SA_std VOLY_std DolarPtaxVenda_std, item
+
+{txt}Test scale = mean(unstandardized items)
+
+                                                            average
+                             item-test     item-rest       interitem
+Item         {c |}  Obs  Sign   correlation   correlation     covariance      alpha
+{hline 13}{c +}{hline 65}
+Ibovespa_S~d{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.2295{col 45} 0.0463{col 59} .4980381{col 73} 0.8741
+{txt}DowJonesIn~d{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9709{col 45} 0.9567{col 59}   .30659{col 73} 0.7558
+{txt}NasdaqComp~d{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9651{col 45} 0.9481{col 59} .3080978{col 73} 0.7571
+{txt}SP500_SA_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9774{col 45} 0.9663{col 59} .3049097{col 73} 0.7543
+{txt}FTSE100_SA~d{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.1364{col 45}-0.0484{col 59} .5220854{col 73} 0.8844
+{txt}Nikkei225_~d{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9555{col 45} 0.9339{col 59} .3105813{col 73} 0.7592
+{txt}VOLY_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.3401{col 45} 0.1633{col 59} .4694978{col 73} 0.8610
+{txt}DolarPtaxV~d{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.8479{col 45} 0.7812{col 59} .3383692{col 73} 0.7817
+{txt}{hline 13}{c +}{hline 65}
+Test scale{col 14}{c |}{res}{col 59} .3822711{col 73} 0.8320
+{txt}{hline 13}{c BT}{hline 65}
+
+{com}. 
+. *Setor Externo
+. alpha REER_IPCA_std VIX_std     J_5Y_std J_10Y_std J_30Y_std DXYajus_std, item
+
+{txt}Test scale = mean(unstandardized items)
+
+                                                            average
+                             item-test     item-rest       interitem
+Item         {c |}  Obs  Sign   correlation   correlation     covariance      alpha
+{hline 13}{c +}{hline 65}
+REER_IPCA_~d{col 14}{c |}{res}{col 16} 137{col 24}-{col 31} 0.8186{col 45} 0.7164{col 59} .3971501{col 73} 0.7671
+{txt}VIX_std{col 14}{c |}{res}{col 16} 137{col 24}-{col 31} 0.5027{col 45} 0.3020{col 59} .5352367{col 73} 0.8520
+{txt}J_5Y_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.6359{col 45} 0.4666{col 59} .4769923{col 73} 0.8201
+{txt}J_10Y_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9236{col 45} 0.8756{col 59} .3512742{col 73} 0.7303
+{txt}J_30Y_std{col 14}{c |}{res}{col 16} 137{col 24}+{col 31} 0.9361{col 45} 0.8953{col 59} .3458327{col 73} 0.7255
+{txt}DXYajus_std{col 14}{c |}{res}{col 16} 137{col 24}-{col 31} 0.5533{col 45} 0.3629{col 59} .5131235{col 73} 0.8405
+{txt}{hline 13}{c +}{hline 65}
+Test scale{col 14}{c |}{res}{col 59} .4366016{col 73} 0.8230
+{txt}{hline 13}{c BT}{hline 65}
+
+{com}. 
+. 
+. *******************************************************************************
+. *Criação do fatores
+. 
+. *******************************************************************************
+. 
+. 
+. *Agregado Monetário
+. factor BaseM_SA_std     M1_std  M2_std  M3_std  M4_std,  pcf factor(1)
+{txt}(obs=137)
+
+Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: (unrotated){col 52}Number of params = {res}       5
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Eigenvalue}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      4.60008      4.24544            0.9200       0.9200
+{txt}{col 5}{ralign 11:Factor2}  {c |}{res}      0.35464      0.31168            0.0709       0.9909
+{txt}{col 5}{ralign 11:Factor3}  {c |}{res}      0.04296      0.04087            0.0086       0.9995
+{txt}{col 5}{ralign 11:Factor4}  {c |}{res}      0.00209      0.00185            0.0004       1.0000
+{txt}{col 5}{ralign 11:Factor5}  {c |}{res}      0.00023            .            0.0000       1.0000
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}10{txt}) ={res} 2313.35{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:BaseM_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.8811}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2236}}}{space 1}
+{space 4}{space 0}{ralign 12:M1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9735}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0523}}}{space 1}
+{space 4}{space 0}{ralign 12:M2_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9944}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0112}}}{space 1}
+{space 4}{space 0}{ralign 12:M3_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9731}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0530}}}{space 1}
+{space 4}{space 0}{ralign 12:M4_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9696}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0598}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+{com}. estat kmo
+
+{txt}{p 0 0 2}Kaiser-Meyer-Olkin measure of sampling adequacy{p_end}
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 7:kmo}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:BaseM_SA_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.7155}}}{space 1}
+{space 4}{space 0}{ralign 12:M1_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.9055}}}{space 1}
+{space 4}{space 0}{ralign 12:M2_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.7824}}}{space 1}
+{space 4}{space 0}{ralign 12:M3_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.7522}}}{space 1}
+{space 4}{space 0}{ralign 12:M4_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.6947}}}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Overall}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.7661}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. rotate, kaiser
+
+{txt}Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: orthogonal varimax (Kaiser on){col 52}Number of params = {res}       5
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Variance}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      4.60008            .            0.9200       0.9200
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}10{txt}) ={res} 2313.35{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Rotated factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:BaseM_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.8811}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2236}}}{space 1}
+{space 4}{space 0}{ralign 12:M1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9735}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0523}}}{space 1}
+{space 4}{space 0}{ralign 12:M2_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9944}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0112}}}{space 1}
+{space 4}{space 0}{ralign 12:M3_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9731}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0530}}}{space 1}
+{space 4}{space 0}{ralign 12:M4_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9696}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0598}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+Factor rotation matrix
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:}{space 1}{c |}{space 1}{ralign 7:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Factor1}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 1.0000}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. predict factor1
+{txt}(regression scoring assumed)
+
+{p 0 0 2}Scoring coefficients (method = regression; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}
+{space 4}{space 0}{ralign 12:BaseM_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.19155}}}{space 1}
+{space 4}{space 0}{ralign 12:M1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.21163}}}{space 1}
+{space 4}{space 0}{ralign 12:M2_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.21617}}}{space 1}
+{space 4}{space 0}{ralign 12:M3_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.21155}}}{space 1}
+{space 4}{space 0}{ralign 12:M4_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.21078}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}
+
+
+{com}. predict factor1a, bartlett
+
+{txt}{p 0 0 2}Scoring coefficients (method = Bartlett; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}
+{space 4}{space 0}{ralign 12:BaseM_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.02749}}}{space 1}
+{space 4}{space 0}{ralign 12:M1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.12990}}}{space 1}
+{space 4}{space 0}{ralign 12:M2_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.61859}}}{space 1}
+{space 4}{space 0}{ralign 12:M3_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.12802}}}{space 1}
+{space 4}{space 0}{ralign 12:M4_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.11306}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}
+
+
+{com}. 
+. *Crédito
+. factor  ROE_std RegCap_std DemDep_SA_std,  pcf factor(1)
+{txt}(obs=137)
+
+Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: (unrotated){col 52}Number of params = {res}       3
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Eigenvalue}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      1.24975      0.15860            0.4166       0.4166
+{txt}{col 5}{ralign 11:Factor2}  {c |}{res}      1.09115      0.43206            0.3637       0.7803
+{txt}{col 5}{ralign 11:Factor3}  {c |}{res}      0.65910            .            0.2197       1.0000
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}3{txt})  ={res}   14.42{txt} Prob>chi2 ={res} 0.0024
+
+{txt}Factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:ROE_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.3648}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.8669}}}{space 1}
+{space 4}{space 0}{ralign 12:RegCap_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.8442}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2873}}}{space 1}
+{space 4}{space 0}{ralign 12:DemDep_SA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.6355}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.5961}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+{com}. estat kmo
+
+{txt}{p 0 0 2}Kaiser-Meyer-Olkin measure of sampling adequacy{p_end}
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 7:kmo}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:ROE_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.3945}}}{space 1}
+{space 4}{space 0}{ralign 12:RegCap_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.4437}}}{space 1}
+{space 4}{space 0}{ralign 12:DemDep_SA_~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.4248}}}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Overall}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.4258}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. rotate, kaiser
+
+{txt}Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: orthogonal varimax (Kaiser on){col 52}Number of params = {res}       3
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Variance}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      1.24975            .            0.4166       0.4166
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}3{txt})  ={res}   14.42{txt} Prob>chi2 ={res} 0.0024
+
+{txt}Rotated factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:ROE_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.3648}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.8669}}}{space 1}
+{space 4}{space 0}{ralign 12:RegCap_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.8442}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2873}}}{space 1}
+{space 4}{space 0}{ralign 12:DemDep_SA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.6355}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.5961}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+Factor rotation matrix
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:}{space 1}{c |}{space 1}{ralign 7:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Factor1}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 1.0000}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. predict factor2
+{txt}(regression scoring assumed)
+
+{p 0 0 2}Scoring coefficients (method = regression; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}
+{space 4}{space 0}{ralign 12:ROE_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.29193}}}{space 1}
+{space 4}{space 0}{ralign 12:RegCap_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.67552}}}{space 1}
+{space 4}{space 0}{ralign 12:DemDep_SA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.50854}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}
+
+
+{com}. predict factor2a, bartlett
+
+{txt}{p 0 0 2}Scoring coefficients (method = Bartlett; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}
+{space 4}{space 0}{ralign 12:ROE_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.12707}}}{space 1}
+{space 4}{space 0}{ralign 12:RegCap_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.88726}}}{space 1}
+{space 4}{space 0}{ralign 12:DemDep_SA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.32191}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}
+
+
+{com}. 
+. *Custo de Oportunidade
+. factor  DIPre_1_std  CDS_5_std,  pcf factor(1)
+{txt}(obs=137)
+
+Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: (unrotated){col 52}Number of params = {res}       1
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Eigenvalue}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      1.37101      0.74202            0.6855       0.6855
+{txt}{col 5}{ralign 11:Factor2}  {c |}{res}      0.62899            .            0.3145       1.0000
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}1{txt})  ={res}   20.07{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:DIPre_1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.8280}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.3145}}}{space 1}
+{space 4}{space 0}{ralign 12:CDS_5_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.8280}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.3145}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+{com}. estat kmo
+
+{txt}{p 0 0 2}Kaiser-Meyer-Olkin measure of sampling adequacy{p_end}
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 7:kmo}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:DIPre_1_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.5000}}}{space 1}
+{space 4}{space 0}{ralign 12:CDS_5_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.5000}}}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Overall}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.5000}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. rotate, kaiser
+
+{txt}Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: orthogonal varimax (Kaiser on){col 52}Number of params = {res}       1
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Variance}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      1.37101            .            0.6855       0.6855
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}1{txt})  ={res}   20.07{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Rotated factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:DIPre_1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.8280}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.3145}}}{space 1}
+{space 4}{space 0}{ralign 12:CDS_5_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.8280}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.3145}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+Factor rotation matrix
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:}{space 1}{c |}{space 1}{ralign 7:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Factor1}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 1.0000}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. predict factor3
+{txt}(regression scoring assumed)
+
+{p 0 0 2}Scoring coefficients (method = regression; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}
+{space 4}{space 0}{ralign 12:DIPre_1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.60390}}}{space 1}
+{space 4}{space 0}{ralign 12:CDS_5_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.60390}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}
+
+
+{com}. predict factor3a, bartlett
+
+{txt}{p 0 0 2}Scoring coefficients (method = Bartlett; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}
+{space 4}{space 0}{ralign 12:DIPre_1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.60390}}}{space 1}
+{space 4}{space 0}{ralign 12:CDS_5_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.60390}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}
+
+
+{com}. 
+. *Mercado de Capitais
+. factor Ibovespa_SA_std DowJonesIndex_SA_std NasdaqComposite_SA_std SP500_SA_std FTSE100_SA_std Nikkei225_SA_std VOLY_std DolarPtaxVenda_std,  pcf factor(1)
+{txt}(obs=137)
+
+Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: (unrotated){col 52}Number of params = {res}       8
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Eigenvalue}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      4.72304      3.16655            0.5904       0.5904
+{txt}{col 5}{ralign 11:Factor2}  {c |}{res}      1.55649      0.22305            0.1946       0.7849
+{txt}{col 5}{ralign 11:Factor3}  {c |}{res}      1.33344      1.05797            0.1667       0.9516
+{txt}{col 5}{ralign 11:Factor4}  {c |}{res}      0.27547      0.20113            0.0344       0.9861
+{txt}{col 5}{ralign 11:Factor5}  {c |}{res}      0.07434      0.04900            0.0093       0.9953
+{txt}{col 5}{ralign 11:Factor6}  {c |}{res}      0.02534      0.01500            0.0032       0.9985
+{txt}{col 5}{ralign 11:Factor7}  {c |}{res}      0.01034      0.00880            0.0013       0.9998
+{txt}{col 5}{ralign 11:Factor8}  {c |}{res}      0.00154            .            0.0002       1.0000
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}28{txt}) ={res} 2179.66{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:Ibovespa_S~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.1837}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.9662}}}{space 1}
+{space 4}{space 0}{ralign 12:DowJonesIn~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9680}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0629}}}{space 1}
+{space 4}{space 0}{ralign 12:NasdaqComp~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9784}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0428}}}{space 1}
+{space 4}{space 0}{ralign 12:SP500_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9848}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0302}}}{space 1}
+{space 4}{space 0}{ralign 12:FTSE100_SA~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.0677}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.9954}}}{space 1}
+{space 4}{space 0}{ralign 12:Nikkei225_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9512}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0953}}}{space 1}
+{space 4}{space 0}{ralign 12:VOLY_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.3504}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.8772}}}{space 1}
+{space 4}{space 0}{ralign 12:DolarPtaxV~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.8905}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2069}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+{com}. estat kmo
+
+{txt}{p 0 0 2}Kaiser-Meyer-Olkin measure of sampling adequacy{p_end}
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 7:kmo}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Ibovespa_S~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.2441}}}{space 1}
+{space 4}{space 0}{ralign 12:DowJonesIn~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.7552}}}{space 1}
+{space 4}{space 0}{ralign 12:NasdaqComp~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.7015}}}{space 1}
+{space 4}{space 0}{ralign 12:SP500_SA_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.6706}}}{space 1}
+{space 4}{space 0}{ralign 12:FTSE100_SA~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.2595}}}{space 1}
+{space 4}{space 0}{ralign 12:Nikkei225_~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.7874}}}{space 1}
+{space 4}{space 0}{ralign 12:VOLY_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.6684}}}{space 1}
+{space 4}{space 0}{ralign 12:DolarPtaxV~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.7653}}}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Overall}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.6717}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. rotate, kaiser
+
+{txt}Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: orthogonal varimax (Kaiser on){col 52}Number of params = {res}       8
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Variance}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      4.72304            .            0.5904       0.5904
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}28{txt}) ={res} 2179.66{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Rotated factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:Ibovespa_S~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.1837}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.9662}}}{space 1}
+{space 4}{space 0}{ralign 12:DowJonesIn~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9680}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0629}}}{space 1}
+{space 4}{space 0}{ralign 12:NasdaqComp~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9784}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0428}}}{space 1}
+{space 4}{space 0}{ralign 12:SP500_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9848}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0302}}}{space 1}
+{space 4}{space 0}{ralign 12:FTSE100_SA~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.0677}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.9954}}}{space 1}
+{space 4}{space 0}{ralign 12:Nikkei225_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9512}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0953}}}{space 1}
+{space 4}{space 0}{ralign 12:VOLY_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.3504}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.8772}}}{space 1}
+{space 4}{space 0}{ralign 12:DolarPtaxV~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.8905}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2069}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+Factor rotation matrix
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:}{space 1}{c |}{space 1}{ralign 7:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Factor1}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 1.0000}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. predict factor4
+{txt}(regression scoring assumed)
+
+{p 0 0 2}Scoring coefficients (method = regression; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}
+{space 4}{space 0}{ralign 12:Ibovespa_S~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.03890}}}{space 1}
+{space 4}{space 0}{ralign 12:DowJonesIn~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.20496}}}{space 1}
+{space 4}{space 0}{ralign 12:NasdaqComp~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.20715}}}{space 1}
+{space 4}{space 0}{ralign 12:SP500_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.20851}}}{space 1}
+{space 4}{space 0}{ralign 12:FTSE100_SA~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.01433}}}{space 1}
+{space 4}{space 0}{ralign 12:Nikkei225_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.20139}}}{space 1}
+{space 4}{space 0}{ralign 12:VOLY_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.07419}}}{space 1}
+{space 4}{space 0}{ralign 12:DolarPtaxV~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.18855}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}
+
+
+{com}. predict factor4a, bartlett
+
+{txt}{p 0 0 2}Scoring coefficients (method = Bartlett; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}
+{space 4}{space 0}{ralign 12:Ibovespa_S~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.00229}}}{space 1}
+{space 4}{space 0}{ralign 12:DowJonesIn~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.18573}}}{space 1}
+{space 4}{space 0}{ralign 12:NasdaqComp~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.27584}}}{space 1}
+{space 4}{space 0}{ralign 12:SP500_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.39334}}}{space 1}
+{space 4}{space 0}{ralign 12:FTSE100_SA~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.00082}}}{space 1}
+{space 4}{space 0}{ralign 12:Nikkei225_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.12045}}}{space 1}
+{space 4}{space 0}{ralign 12:VOLY_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.00482}}}{space 1}
+{space 4}{space 0}{ralign 12:DolarPtaxV~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.05192}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}
+
+
+{com}. 
+. *Setor Externo
+. factor REER_IPCA_std VIX_std    J_5Y_std J_10Y_std J_30Y_std DXYajus_std,  pcf factor(1)
+{txt}(obs=137)
+
+Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: (unrotated){col 52}Number of params = {res}       6
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Eigenvalue}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      3.38957      1.81425            0.5649       0.5649
+{txt}{col 5}{ralign 11:Factor2}  {c |}{res}      1.57532      0.84236            0.2626       0.8275
+{txt}{col 5}{ralign 11:Factor3}  {c |}{res}      0.73296      0.52675            0.1222       0.9496
+{txt}{col 5}{ralign 11:Factor4}  {c |}{res}      0.20621      0.11285            0.0344       0.9840
+{txt}{col 5}{ralign 11:Factor5}  {c |}{res}      0.09336      0.09078            0.0156       0.9996
+{txt}{col 5}{ralign 11:Factor6}  {c |}{res}      0.00258            .            0.0004       1.0000
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}15{txt}) ={res} 1146.52{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:REER_IPCA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.8304}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.3105}}}{space 1}
+{space 4}{space 0}{ralign 12:VIX_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.4179}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.8254}}}{space 1}
+{space 4}{space 0}{ralign 12:J_5Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.6320}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.6006}}}{space 1}
+{space 4}{space 0}{ralign 12:J_10Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9383}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.1196}}}{space 1}
+{space 4}{space 0}{ralign 12:J_30Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9607}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0771}}}{space 1}
+{space 4}{space 0}{ralign 12:DXYajus_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.5681}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.6773}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+{com}. estat kmo
+
+{txt}{p 0 0 2}Kaiser-Meyer-Olkin measure of sampling adequacy{p_end}
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 7:kmo}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:REER_IPCA_~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.6305}}}{space 1}
+{space 4}{space 0}{ralign 12:VIX_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.8884}}}{space 1}
+{space 4}{space 0}{ralign 12:J_5Y_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.3411}}}{space 1}
+{space 4}{space 0}{ralign 12:J_10Y_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.4773}}}{space 1}
+{space 4}{space 0}{ralign 12:J_30Y_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.5018}}}{space 1}
+{space 4}{space 0}{ralign 12:DXYajus_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.5434}}}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Overall}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.4974}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. rotate, kaiser
+
+{txt}Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: orthogonal varimax (Kaiser on){col 52}Number of params = {res}       6
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Variance}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      3.38957            .            0.5649       0.5649
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}15{txt}) ={res} 1146.52{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Rotated factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:REER_IPCA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.8304}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.3105}}}{space 1}
+{space 4}{space 0}{ralign 12:VIX_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.4179}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.8254}}}{space 1}
+{space 4}{space 0}{ralign 12:J_5Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.6320}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.6006}}}{space 1}
+{space 4}{space 0}{ralign 12:J_10Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9383}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.1196}}}{space 1}
+{space 4}{space 0}{ralign 12:J_30Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9607}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0771}}}{space 1}
+{space 4}{space 0}{ralign 12:DXYajus_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.5681}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.6773}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+Factor rotation matrix
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:}{space 1}{c |}{space 1}{ralign 7:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Factor1}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 1.0000}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. predict factor5
+{txt}(regression scoring assumed)
+
+{p 0 0 2}Scoring coefficients (method = regression; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}
+{space 4}{space 0}{ralign 12:REER_IPCA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.24498}}}{space 1}
+{space 4}{space 0}{ralign 12:VIX_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.12329}}}{space 1}
+{space 4}{space 0}{ralign 12:J_5Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.18646}}}{space 1}
+{space 4}{space 0}{ralign 12:J_10Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.27681}}}{space 1}
+{space 4}{space 0}{ralign 12:J_30Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.28342}}}{space 1}
+{space 4}{space 0}{ralign 12:DXYajus_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.16760}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}
+
+
+{com}. predict factor5a, bartlett
+
+{txt}{p 0 0 2}Scoring coefficients (method = Bartlett; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}
+{space 4}{space 0}{ralign 12:REER_IPCA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.11680}}}{space 1}
+{space 4}{space 0}{ralign 12:VIX_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.02211}}}{space 1}
+{space 4}{space 0}{ralign 12:J_5Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.04596}}}{space 1}
+{space 4}{space 0}{ralign 12:J_10Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.34248}}}{space 1}
+{space 4}{space 0}{ralign 12:J_30Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.54398}}}{space 1}
+{space 4}{space 0}{ralign 12:DXYajus_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.03663}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}
+
+
+{com}. 
+. *TODOS 
+. factor BaseM_SA_std     M1_std  M2_std  M3_std  M4_std ROE_std  RegCap_std      DemDep_SA_std DIPre_1_std CDS_5_std Ibovespa_SA_std     DowJonesIndex_SA_std NasdaqComposite_SA_std SP500_SA_std FTSE100_SA_std Nikkei225_SA_std VOLY_std DolarPtaxVenda_std REER_IPCA_std VIX_std      J_5Y_std J_10Y_std J_30Y_std DXYajus_std, pcf
+{txt}(obs=137)
+
+Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       5
+{col 5}{txt}Rotation: (unrotated){col 52}Number of params = {res}     110
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Eigenvalue}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}     12.06340      7.95013            0.5026       0.5026
+{txt}{col 5}{ralign 11:Factor2}  {c |}{res}      4.11327      0.86540            0.1714       0.6740
+{txt}{col 5}{ralign 11:Factor3}  {c |}{res}      3.24787      1.51314            0.1353       0.8094
+{txt}{col 5}{ralign 11:Factor4}  {c |}{res}      1.73473      0.59879            0.0723       0.8816
+{txt}{col 5}{ralign 11:Factor5}  {c |}{res}      1.13593      0.65013            0.0473       0.9290
+{txt}{col 5}{ralign 11:Factor6}  {c |}{res}      0.48580      0.13750            0.0202       0.9492
+{txt}{col 5}{ralign 11:Factor7}  {c |}{res}      0.34831      0.11961            0.0145       0.9637
+{txt}{col 5}{ralign 11:Factor8}  {c |}{res}      0.22870      0.03103            0.0095       0.9733
+{txt}{col 5}{ralign 11:Factor9}  {c |}{res}      0.19766      0.04828            0.0082       0.9815
+{txt}{col 5}{ralign 11:Factor10}  {c |}{res}      0.14938      0.04087            0.0062       0.9877
+{txt}{col 5}{ralign 11:Factor11}  {c |}{res}      0.10852      0.05131            0.0045       0.9922
+{txt}{col 5}{ralign 11:Factor12}  {c |}{res}      0.05721      0.01539            0.0024       0.9946
+{txt}{col 5}{ralign 11:Factor13}  {c |}{res}      0.04182      0.01473            0.0017       0.9964
+{txt}{col 5}{ralign 11:Factor14}  {c |}{res}      0.02709      0.00807            0.0011       0.9975
+{txt}{col 5}{ralign 11:Factor15}  {c |}{res}      0.01902      0.00287            0.0008       0.9983
+{txt}{col 5}{ralign 11:Factor16}  {c |}{res}      0.01615      0.00306            0.0007       0.9990
+{txt}{col 5}{ralign 11:Factor17}  {c |}{res}      0.01309      0.00868            0.0005       0.9995
+{txt}{col 5}{ralign 11:Factor18}  {c |}{res}      0.00441      0.00103            0.0002       0.9997
+{txt}{col 5}{ralign 11:Factor19}  {c |}{res}      0.00338      0.00140            0.0001       0.9998
+{txt}{col 5}{ralign 11:Factor20}  {c |}{res}      0.00198      0.00081            0.0001       0.9999
+{txt}{col 5}{ralign 11:Factor21}  {c |}{res}      0.00117      0.00050            0.0000       1.0000
+{txt}{col 5}{ralign 11:Factor22}  {c |}{res}      0.00067      0.00033            0.0000       1.0000
+{txt}{col 5}{ralign 11:Factor23}  {c |}{res}      0.00034      0.00026            0.0000       1.0000
+{txt}{col 5}{ralign 11:Factor24}  {c |}{res}      0.00008            .            0.0000       1.0000
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated: chi2({res}276{txt}) ={res} 9495.06{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{hline 10}{hline 10}{hline 10}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{space 1}{ralign 8:Factor2}{space 1}{space 1}{ralign 8:Factor3}{space 1}{space 1}{ralign 8:Factor4}{space 1}{space 1}{ralign 8:Factor5}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{hline 10}{hline 10}{hline 10}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:BaseM_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.8429}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.3527}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0248}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.2602}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2283}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0446}}}{space 1}
+{space 4}{space 0}{ralign 12:M1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9340}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1362}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1337}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1261}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2311}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0220}}}{space 1}
+{space 4}{space 0}{ralign 12:M2_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9894}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0463}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0786}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0405}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0474}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0088}}}{space 1}
+{space 4}{space 0}{ralign 12:M3_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9778}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1536}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1038}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0026}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0229}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0091}}}{space 1}
+{space 4}{space 0}{ralign 12:M4_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9752}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1672}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0993}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0158}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0167}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0107}}}{space 1}
+{space 4}{space 0}{ralign 12:ROE_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.1464}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.2974}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2299}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.7903}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0286}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2119}}}{space 1}
+{space 4}{space 0}{ralign 12:RegCap_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.0938}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.3765}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.6776}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.3437}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.2140}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2263}}}{space 1}
+{space 4}{space 0}{ralign 12:DemDep_SA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.0563}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.7820}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2790}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.2333}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.4578}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0435}}}{space 1}
+{space 4}{space 0}{ralign 12:DIPre_1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.6291}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2222}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.5328}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0275}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.3413}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.1538}}}{space 1}
+{space 4}{space 0}{ralign 12:CDS_5_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.2723}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2893}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.8471}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2046}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1139}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0698}}}{space 1}
+{space 4}{space 0}{ralign 12:Ibovespa_S~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.1720}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.4132}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.7876}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2800}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0605}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0974}}}{space 1}
+{space 4}{space 0}{ralign 12:DowJonesIn~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9281}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2539}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2409}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0077}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0495}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0135}}}{space 1}
+{space 4}{space 0}{ralign 12:NasdaqComp~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9684}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0232}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1808}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0125}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1420}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0086}}}{space 1}
+{space 4}{space 0}{ralign 12:SP500_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9570}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1805}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1669}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0348}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1026}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0120}}}{space 1}
+{space 4}{space 0}{ralign 12:FTSE100_SA~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.0763}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.9093}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1746}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.2315}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0028}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0833}}}{space 1}
+{space 4}{space 0}{ralign 12:Nikkei225_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.8847}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.3974}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0261}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0054}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1638}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0317}}}{space 1}
+{space 4}{space 0}{ralign 12:VOLY_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.3606}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1659}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.6715}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.4107}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2704}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.1498}}}{space 1}
+{space 4}{space 0}{ralign 12:DolarPtaxV~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9228}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0499}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.2621}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1738}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0457}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0449}}}{space 1}
+{space 4}{space 0}{ralign 12:REER_IPCA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9641}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0304}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1541}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1300}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0537}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0261}}}{space 1}
+{space 4}{space 0}{ralign 12:VIX_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.1649}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.6836}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1252}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.5001}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0644}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2356}}}{space 1}
+{space 4}{space 0}{ralign 12:J_5Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.2193}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.8115}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2535}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.3242}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2393}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0668}}}{space 1}
+{space 4}{space 0}{ralign 12:J_10Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.6387}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.4965}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2818}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2093}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.4427}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0263}}}{space 1}
+{space 4}{space 0}{ralign 12:J_30Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.8358}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1801}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2153}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0978}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.4248}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0326}}}{space 1}
+{space 4}{space 0}{ralign 12:DXYajus_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.6820}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.5031}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.3037}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2275}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.2492}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0756}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{hline 10}{hline 10}{hline 10}{hline 10}{c  BT}{hline 14}
+
+{com}. estat kmo
+
+{txt}{p 0 0 2}Kaiser-Meyer-Olkin measure of sampling adequacy{p_end}
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 7:kmo}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:BaseM_SA_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.8741}}}{space 1}
+{space 4}{space 0}{ralign 12:M1_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.9080}}}{space 1}
+{space 4}{space 0}{ralign 12:M2_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.9300}}}{space 1}
+{space 4}{space 0}{ralign 12:M3_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.8965}}}{space 1}
+{space 4}{space 0}{ralign 12:M4_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.8878}}}{space 1}
+{space 4}{space 0}{ralign 12:ROE_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.4213}}}{space 1}
+{space 4}{space 0}{ralign 12:RegCap_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.5852}}}{space 1}
+{space 4}{space 0}{ralign 12:DemDep_SA_~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.6610}}}{space 1}
+{space 4}{space 0}{ralign 12:DIPre_1_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.6964}}}{space 1}
+{space 4}{space 0}{ralign 12:CDS_5_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.7641}}}{space 1}
+{space 4}{space 0}{ralign 12:Ibovespa_S~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.6361}}}{space 1}
+{space 4}{space 0}{ralign 12:DowJonesIn~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.8370}}}{space 1}
+{space 4}{space 0}{ralign 12:NasdaqComp~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.8524}}}{space 1}
+{space 4}{space 0}{ralign 12:SP500_SA_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.8043}}}{space 1}
+{space 4}{space 0}{ralign 12:FTSE100_SA~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.7939}}}{space 1}
+{space 4}{space 0}{ralign 12:Nikkei225_~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.9095}}}{space 1}
+{space 4}{space 0}{ralign 12:VOLY_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.6737}}}{space 1}
+{space 4}{space 0}{ralign 12:DolarPtaxV~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.8924}}}{space 1}
+{space 4}{space 0}{ralign 12:REER_IPCA_~d}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.8985}}}{space 1}
+{space 4}{space 0}{ralign 12:VIX_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.6308}}}{space 1}
+{space 4}{space 0}{ralign 12:J_5Y_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.5501}}}{space 1}
+{space 4}{space 0}{ralign 12:J_10Y_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.6920}}}{space 1}
+{space 4}{space 0}{ralign 12:J_30Y_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.7702}}}{space 1}
+{space 4}{space 0}{ralign 12:DXYajus_std}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.9156}}}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Overall}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.8211}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. rotate, kaiser
+
+{txt}Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       5
+{col 5}{txt}Rotation: orthogonal varimax (Kaiser on){col 52}Number of params = {res}     110
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Variance}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}     11.48978      8.27525            0.4787       0.4787
+{txt}{col 5}{ralign 11:Factor2}  {c |}{res}      3.21453      0.25022            0.1339       0.6127
+{txt}{col 5}{ralign 11:Factor3}  {c |}{res}      2.96431      0.62973            0.1235       0.7362
+{txt}{col 5}{ralign 11:Factor4}  {c |}{res}      2.33458      0.04260            0.0973       0.8335
+{txt}{col 5}{ralign 11:Factor5}  {c |}{res}      2.29199            .            0.0955       0.9290
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated: chi2({res}276{txt}) ={res} 9495.06{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Rotated factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{hline 10}{hline 10}{hline 10}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{space 1}{ralign 8:Factor2}{space 1}{space 1}{ralign 8:Factor3}{space 1}{space 1}{ralign 8:Factor4}{space 1}{space 1}{ralign 8:Factor5}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{hline 10}{hline 10}{hline 10}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:BaseM_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.7968}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.3659}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0445}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.4288}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0270}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0446}}}{space 1}
+{space 4}{space 0}{ralign 12:M1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9343}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1706}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0149}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.2754}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0025}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0220}}}{space 1}
+{space 4}{space 0}{ralign 12:M2_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9818}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1647}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0038}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0038}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0093}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0088}}}{space 1}
+{space 4}{space 0}{ralign 12:M3_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9799}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1129}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0395}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1264}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0196}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0091}}}{space 1}
+{space 4}{space 0}{ralign 12:M4_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9800}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0972}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0304}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1351}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0150}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0107}}}{space 1}
+{space 4}{space 0}{ralign 12:ROE_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.1431}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1591}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1427}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0549}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.8479}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2119}}}{space 1}
+{space 4}{space 0}{ralign 12:RegCap_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.2105}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.4194}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.6190}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.3653}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1920}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2263}}}{space 1}
+{space 4}{space 0}{ralign 12:DemDep_SA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.0402}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.2290}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1741}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.9150}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1870}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0435}}}{space 1}
+{space 4}{space 0}{ralign 12:DIPre_1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.5952}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.3262}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.5998}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0269}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1586}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.1538}}}{space 1}
+{space 4}{space 0}{ralign 12:CDS_5_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.2160}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0189}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.8812}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.3256}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0240}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0698}}}{space 1}
+{space 4}{space 0}{ralign 12:Ibovespa_S~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.2245}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0750}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.6818}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.3360}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.5185}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0974}}}{space 1}
+{space 4}{space 0}{ralign 12:DowJonesIn~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9756}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0497}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1329}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1086}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0526}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0135}}}{space 1}
+{space 4}{space 0}{ralign 12:NasdaqComp~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9863}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0777}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0615}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0878}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0336}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0086}}}{space 1}
+{space 4}{space 0}{ralign 12:SP500_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9901}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0101}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0553}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0282}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0614}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0120}}}{space 1}
+{space 4}{space 0}{ralign 12:FTSE100_SA~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.0782}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.5758}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1272}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.4253}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.6181}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0833}}}{space 1}
+{space 4}{space 0}{ralign 12:Nikkei225_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9434}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1479}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1138}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1499}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1446}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0317}}}{space 1}
+{space 4}{space 0}{ralign 12:VOLY_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.2855}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1142}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.7771}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0170}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.3891}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.1498}}}{space 1}
+{space 4}{space 0}{ralign 12:DolarPtaxV~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.8625}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.2501}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.3261}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0791}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1898}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0449}}}{space 1}
+{space 4}{space 0}{ralign 12:REER_IPCA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9199}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.2225}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2278}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.0521}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1537}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0261}}}{space 1}
+{space 4}{space 0}{ralign 12:VIX_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.0436}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.3868}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.1175}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.1656}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.7561}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2356}}}{space 1}
+{space 4}{space 0}{ralign 12:J_5Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.0173}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.8901}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0513}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.3613}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0860}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0668}}}{space 1}
+{space 4}{space 0}{ralign 12:J_10Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.4380}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.8797}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0639}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0289}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0553}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0263}}}{space 1}
+{space 4}{space 0}{ralign 12:J_30Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.6892}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.6582}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0589}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.2354}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0181}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0326}}}{space 1}
+{space 4}{space 0}{ralign 12:DXYajus_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.6619}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0104}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.2912}}}{space 1}{space 1}{ralign 8:{res:{sf:  0.6326}}}{space 1}{space 1}{ralign 8:{res:{sf: -0.0344}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0756}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{hline 10}{hline 10}{hline 10}{hline 10}{c  BT}{hline 14}
+
+Factor rotation matrix
+
+{space 4}{hline 13}{c  TT}{hline 9}{hline 9}{hline 9}{hline 9}{hline 9}
+{space 4}{space 0}{ralign 12:}{space 1}{c |}{space 1}{ralign 7:Factor1}{space 1}{space 1}{ralign 7:Factor2}{space 1}{space 1}{ralign 7:Factor3}{space 1}{space 1}{ralign 7:Factor4}{space 1}{space 1}{ralign 7:Factor5}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}{hline 9}{hline 9}{hline 9}{hline 9}
+{space 4}{space 0}{ralign 12:Factor1}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.9686}}}{space 1}{space 1}{ralign 7:{res:{sf:-0.2360}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.0534}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.0384}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.0416}}}{space 1}
+{space 4}{space 0}{ralign 12:Factor2}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.1468}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.6328}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.0741}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.5924}}}{space 1}{space 1}{ralign 7:{res:{sf:-0.4706}}}{space 1}
+{space 4}{space 0}{ralign 12:Factor3}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.1316}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.3190}}}{space 1}{space 1}{ralign 7:{res:{sf:-0.9154}}}{space 1}{space 1}{ralign 7:{res:{sf:-0.1862}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.0914}}}{space 1}
+{space 4}{space 0}{ralign 12:Factor4}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.0208}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.3240}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.1368}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.3279}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.8766}}}{space 1}
+{space 4}{space 0}{ralign 12:Factor5}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.1497}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.5806}}}{space 1}{space 1}{ralign 7:{res:{sf: 0.3675}}}{space 1}{space 1}{ralign 7:{res:{sf:-0.7109}}}{space 1}{space 1}{ralign 7:{res:{sf:-0.0095}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}{hline 9}{hline 9}{hline 9}{hline 9}
+
+{com}.  
+. predict factor6 factor7 factor8 factor9 factor10 
+{txt}(regression scoring assumed)
+
+{p 0 0 2}Scoring coefficients (method = regression; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}{hline 10}{hline 10}{hline 10}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{space 1}{ralign 8:Factor2}{space 1}{space 1}{ralign 8:Factor3}{space 1}{space 1}{ralign 8:Factor4}{space 1}{space 1}{ralign 8:Factor5}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{hline 10}{hline 10}{hline 10}{hline 10}
+{space 4}{space 0}{ralign 12:BaseM_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.08309}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.00022}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.04373}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.24161}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.08945}}}{space 1}
+{space 4}{space 0}{ralign 12:M1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.10451}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.06846}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.02880}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.19277}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.04309}}}{space 1}
+{space 4}{space 0}{ralign 12:M2_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.09005}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.01217}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.00478}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.03202}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.02051}}}{space 1}
+{space 4}{space 0}{ralign 12:M3_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.08521}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.00346}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.02938}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.03413}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.00978}}}{space 1}
+{space 4}{space 0}{ralign 12:M4_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.08628}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.01084}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.02480}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.03493}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.00483}}}{space 1}
+{space 4}{space 0}{ralign 12:ROE_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.00737}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.11268}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.01774}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.11081}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.43956}}}{space 1}
+{space 4}{space 0}{ralign 12:RegCap_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.02434}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.07747}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.22591}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.21457}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.15181}}}{space 1}
+{space 4}{space 0}{ralign 12:DemDep_SA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.04548}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.09639}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.03721}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.45904}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.02423}}}{space 1}
+{space 4}{space 0}{ralign 12:DIPre_1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.01885}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.17375}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.26396}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.14786}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.03156}}}{space 1}
+{space 4}{space 0}{ralign 12:CDS_5_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.01532}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.05244}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.29815}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.05846}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.04642}}}{space 1}
+{space 4}{space 0}{ralign 12:Ibovespa_S~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.04231}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.09363}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.18701}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.08904}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.21100}}}{space 1}
+{space 4}{space 0}{ralign 12:DowJonesIn~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.09997}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.07129}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.04261}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.00379}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.01560}}}{space 1}
+{space 4}{space 0}{ralign 12:NasdaqComp~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.10449}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.07265}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.00128}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.09518}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.00171}}}{space 1}
+{space 4}{space 0}{ralign 12:SP500_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.10316}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.07138}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.00911}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.05131}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.03110}}}{space 1}
+{space 4}{space 0}{ralign 12:FTSE100_SA~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.03100}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.11673}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.05052}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.07519}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.21639}}}{space 1}
+{space 4}{space 0}{ralign 12:Nikkei225_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.10794}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.13114}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.05714}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.04293}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.04032}}}{space 1}
+{space 4}{space 0}{ralign 12:VOLY_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.03637}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.11637}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.30769}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.07583}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.20658}}}{space 1}
+{space 4}{space 0}{ralign 12:DolarPtaxV~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.06980}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.00435}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.10555}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.01502}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.08895}}}{space 1}
+{space 4}{space 0}{ralign 12:REER_IPCA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.07872}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.01308}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.07477}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.00151}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.06770}}}{space 1}
+{space 4}{space 0}{ralign 12:VIX_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.01874}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.06021}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.04230}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.04406}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.32848}}}{space 1}
+{space 4}{space 0}{ralign 12:J_5Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.05705}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.33688}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.04517}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.01319}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.07532}}}{space 1}
+{space 4}{space 0}{ralign 12:J_10Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.03873}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.38194}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.08642}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.18418}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.05095}}}{space 1}
+{space 4}{space 0}{ralign 12:J_30Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.00521}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.30060}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.08401}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.23643}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.02843}}}{space 1}
+{space 4}{space 0}{ralign 12:DXYajus_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.03028}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.05064}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.03498}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.29102}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.05329}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{hline 10}{hline 10}{hline 10}{hline 10}
+
+
+{com}. 
+. 
+. predict factor6a factor7a factor8a factor9a factor10a, bartlett 
+
+{txt}{p 0 0 2}Scoring coefficients (method = Bartlett; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}{hline 10}{hline 10}{hline 10}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{space 1}{ralign 8:Factor2}{space 1}{space 1}{ralign 8:Factor3}{space 1}{space 1}{ralign 8:Factor4}{space 1}{space 1}{ralign 8:Factor5}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{hline 10}{hline 10}{hline 10}{hline 10}
+{space 4}{space 0}{ralign 12:BaseM_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.02727}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.05486}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.10967}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.27898}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.22388}}}{space 1}
+{space 4}{space 0}{ralign 12:M1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.07721}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.03739}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.12442}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.38298}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.18079}}}{space 1}
+{space 4}{space 0}{ralign 12:M2_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.14684}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.06007}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.03000}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.09334}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.13002}}}{space 1}
+{space 4}{space 0}{ralign 12:M3_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.12734}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.06131}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.21290}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.29115}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.02763}}}{space 1}
+{space 4}{space 0}{ralign 12:M4_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.11250}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.01710}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.14902}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.25777}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.07585}}}{space 1}
+{space 4}{space 0}{ralign 12:ROE_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.00355}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.04541}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.02741}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.06203}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.27903}}}{space 1}
+{space 4}{space 0}{ralign 12:RegCap_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.00061}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.01903}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.10012}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.07399}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.09968}}}{space 1}
+{space 4}{space 0}{ralign 12:DemDep_SA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.02246}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.03005}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.04299}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.47552}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.02175}}}{space 1}
+{space 4}{space 0}{ralign 12:DIPre_1_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.00471}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.04959}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.14963}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.06479}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.05986}}}{space 1}
+{space 4}{space 0}{ralign 12:CDS_5_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.01667}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.06428}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.39898}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.01074}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.02010}}}{space 1}
+{space 4}{space 0}{ralign 12:Ibovespa_S~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.00686}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.04304}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.20755}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.03521}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.33250}}}{space 1}
+{space 4}{space 0}{ralign 12:DowJonesIn~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.10860}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.13082}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.28393}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.13390}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.03639}}}{space 1}
+{space 4}{space 0}{ralign 12:NasdaqComp~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.19423}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.19979}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.02502}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.32149}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.17362}}}{space 1}
+{space 4}{space 0}{ralign 12:SP500_SA_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.13158}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.12862}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.05252}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.09276}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.22915}}}{space 1}
+{space 4}{space 0}{ralign 12:FTSE100_SA~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.00245}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.02813}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.04821}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.02799}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.36343}}}{space 1}
+{space 4}{space 0}{ralign 12:Nikkei225_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.06075}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.13417}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.16346}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.04139}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.17468}}}{space 1}
+{space 4}{space 0}{ralign 12:VOLY_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.01265}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.05334}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.17851}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.02534}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.16070}}}{space 1}
+{space 4}{space 0}{ralign 12:DolarPtaxV~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.03201}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.02870}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.22326}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.02213}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.26224}}}{space 1}
+{space 4}{space 0}{ralign 12:REER_IPCA_~d}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.05652}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.04231}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.27549}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.02163}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.36310}}}{space 1}
+{space 4}{space 0}{ralign 12:VIX_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.00097}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.00663}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.00959}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.02394}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.19004}}}{space 1}
+{space 4}{space 0}{ralign 12:J_5Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.02606}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.21475}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.01127}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.07176}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.11165}}}{space 1}
+{space 4}{space 0}{ralign 12:J_10Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.06308}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.58240}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.14049}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.19002}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.15515}}}{space 1}
+{space 4}{space 0}{ralign 12:J_30Y_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.02983}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.36062}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.12422}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.26912}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.04768}}}{space 1}
+{space 4}{space 0}{ralign 12:DXYajus_std}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.00628}}}{space 1}{space 1}{ralign 8:{res:{sf:-0.00117}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.05996}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.17665}}}{space 1}{space 1}{ralign 8:{res:{sf: 0.07777}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{hline 10}{hline 10}{hline 10}{hline 10}
+
+
+{com}. 
+. 
+. 
+. *******************************************************************************
+. *Indicador I
+. 
+. *******************************************************************************
+. 
+. factor factor1 factor2 factor3 factor4 factor5, pcf factor(1)
+{txt}(obs=137)
+
+Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: (unrotated){col 52}Number of params = {res}       5
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Eigenvalue}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      2.69091      1.52373            0.5382       0.5382
+{txt}{col 5}{ralign 11:Factor2}  {c |}{res}      1.16718      0.33614            0.2334       0.7716
+{txt}{col 5}{ralign 11:Factor3}  {c |}{res}      0.83105      0.52926            0.1662       0.9378
+{txt}{col 5}{ralign 11:Factor4}  {c |}{res}      0.30178      0.29271            0.0604       0.9982
+{txt}{col 5}{ralign 11:Factor5}  {c |}{res}      0.00907            .            0.0018       1.0000
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}10{txt}) ={res}  664.57{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:factor1}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9808}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0381}}}{space 1}
+{space 4}{space 0}{ralign 12:factor2}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.0630}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.9960}}}{space 1}
+{space 4}{space 0}{ralign 12:factor3}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.3131}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.9020}}}{space 1}
+{space 4}{space 0}{ralign 12:factor4}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9429}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.1110}}}{space 1}
+{space 4}{space 0}{ralign 12:factor5}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.8591}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2620}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+{com}. estat kmo
+
+{txt}{p 0 0 2}Kaiser-Meyer-Olkin measure of sampling adequacy{p_end}
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 7:kmo}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:factor1}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.4215}}}{space 1}
+{space 4}{space 0}{ralign 12:factor2}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.0472}}}{space 1}
+{space 4}{space 0}{ralign 12:factor3}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.0901}}}{space 1}
+{space 4}{space 0}{ralign 12:factor4}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.4108}}}{space 1}
+{space 4}{space 0}{ralign 12:factor5}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.7419}}}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Overall}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.3679}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. rotate, kaiser
+
+{txt}Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: orthogonal varimax (Kaiser on){col 52}Number of params = {res}       5
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Variance}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      2.69091            .            0.5382       0.5382
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}10{txt}) ={res}  664.57{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Rotated factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:factor1}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9808}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0381}}}{space 1}
+{space 4}{space 0}{ralign 12:factor2}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.0630}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.9960}}}{space 1}
+{space 4}{space 0}{ralign 12:factor3}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.3131}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.9020}}}{space 1}
+{space 4}{space 0}{ralign 12:factor4}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9429}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.1110}}}{space 1}
+{space 4}{space 0}{ralign 12:factor5}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.8591}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.2620}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+Factor rotation matrix
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:}{space 1}{c |}{space 1}{ralign 7:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Factor1}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 1.0000}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}.  
+. predict Indice1
+{txt}(regression scoring assumed)
+
+{p 0 0 2}Scoring coefficients (method = regression; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}
+{space 4}{space 0}{ralign 12:factor1}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.36448}}}{space 1}
+{space 4}{space 0}{ralign 12:factor2}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.02342}}}{space 1}
+{space 4}{space 0}{ralign 12:factor3}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.11634}}}{space 1}
+{space 4}{space 0}{ralign 12:factor4}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.35039}}}{space 1}
+{space 4}{space 0}{ralign 12:factor5}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.31925}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}
+
+
+{com}. 
+. *******************************************************************************
+. *Indicador Ia
+. 
+. *******************************************************************************
+. 
+. factor factor1a factor2a factor3a factor4a factor5a, pcf factor(1)
+{txt}(obs=137)
+
+Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: (unrotated){col 52}Number of params = {res}       5
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Eigenvalue}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      2.69994      1.43162            0.5400       0.5400
+{txt}{col 5}{ralign 11:Factor2}  {c |}{res}      1.26833      0.54349            0.2537       0.7937
+{txt}{col 5}{ralign 11:Factor3}  {c |}{res}      0.72484      0.42573            0.1450       0.9386
+{txt}{col 5}{ralign 11:Factor4}  {c |}{res}      0.29910      0.29132            0.0598       0.9984
+{txt}{col 5}{ralign 11:Factor5}  {c |}{res}      0.00779            .            0.0016       1.0000
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}10{txt}) ={res}  693.08{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:factor1a}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9769}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0456}}}{space 1}
+{space 4}{space 0}{ralign 12:factor2a}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.1036}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.9893}}}{space 1}
+{space 4}{space 0}{ralign 12:factor3a}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.3854}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.8515}}}{space 1}
+{space 4}{space 0}{ralign 12:factor4a}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9503}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0970}}}{space 1}
+{space 4}{space 0}{ralign 12:factor5a}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.8266}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.3167}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+{com}. estat kmo
+
+{txt}{p 0 0 2}Kaiser-Meyer-Olkin measure of sampling adequacy{p_end}
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 7:kmo}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:factor1a}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.4955}}}{space 1}
+{space 4}{space 0}{ralign 12:factor2a}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.2250}}}{space 1}
+{space 4}{space 0}{ralign 12:factor3a}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.4420}}}{space 1}
+{space 4}{space 0}{ralign 12:factor4a}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.4927}}}{space 1}
+{space 4}{space 0}{ralign 12:factor5a}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.5909}}}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Overall}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 0.4919}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. rotate, kaiser
+
+{txt}Factor analysis/correlation{col 52}Number of obs    = {res}     137
+{col 5}{txt}Method: principal-component factors{col 52}Retained factors = {res}       1
+{col 5}{txt}Rotation: orthogonal varimax (Kaiser on){col 52}Number of params = {res}       5
+
+{txt}{col 5}{hline 13}{c TT}{hline 60}
+{col 5}     Factor  {c |} {ralign 12:Variance}   Difference        Proportion   Cumulative
+{col 5}{hline 13}{c +}{hline 60}
+{col 5}{ralign 11:Factor1}  {c |}{res}      2.69994            .            0.5400       0.5400
+{txt}{col 5}{hline 13}{c BT}{hline 60}
+{col 5}LR test: independent vs. saturated:  chi2({res}10{txt}) ={res}  693.08{txt} Prob>chi2 ={res} 0.0000
+
+{txt}Rotated factor loadings (pattern matrix) and unique variances
+
+{space 4}{hline 13}{c  TT}{hline 10}{c  TT}{hline 14}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}{c |}{space 1}{ralign 12:Uniqueness}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}{c   +}{hline 14}
+{space 4}{space 0}{ralign 12:factor1a}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9769}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0456}}}{space 1}
+{space 4}{space 0}{ralign 12:factor2a}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.1036}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.9893}}}{space 1}
+{space 4}{space 0}{ralign 12:factor3a}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.3854}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.8515}}}{space 1}
+{space 4}{space 0}{ralign 12:factor4a}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  0.9503}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.0970}}}{space 1}
+{space 4}{space 0}{ralign 12:factor5a}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -0.8266}}}{space 1}{c |}{space 1}{center 12:{res:{sf:    0.3167}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}{c  BT}{hline 14}
+
+Factor rotation matrix
+
+{space 4}{hline 13}{c  TT}{hline 9}
+{space 4}{space 0}{ralign 12:}{space 1}{c |}{space 1}{ralign 7:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 9}
+{space 4}{space 0}{ralign 12:Factor1}{space 1}{c |}{space 1}{ralign 7:{res:{sf: 1.0000}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 9}
+
+{com}. 
+. predict Indice1a, bartlett
+
+{txt}{p 0 0 2}Scoring coefficients (method = Bartlett; based on varimax rotated factors){p_end}
+
+{space 4}{hline 13}{c  TT}{hline 10}
+{space 4}{space 0}{ralign 12:Variable}{space 1}{c |}{space 1}{ralign 8:Factor1}{space 1}
+{space 4}{hline 13}{c   +}{hline 10}
+{space 4}{space 0}{ralign 12:factor1a}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.65765}}}{space 1}
+{space 4}{space 0}{ralign 12:factor2a}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.00321}}}{space 1}
+{space 4}{space 0}{ralign 12:factor3a}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.01389}}}{space 1}
+{space 4}{space 0}{ralign 12:factor4a}{space 1}{c |}{space 1}{ralign 8:{res:{sf: 0.30058}}}{space 1}
+{space 4}{space 0}{ralign 12:factor5a}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-0.08009}}}{space 1}
+{space 4}{hline 13}{c  BT}{hline 10}
+
+
+{com}. 
+. 
+. 
+. *******************************************************************************
+. *Indicador II
+. 
+. *******************************************************************************
+. 
+. gen Indice2 = factor6*0.4787/0.9290+ factor7*0.1339/0.9290+ factor8*0.1235/0.9290+ factor9*0.0973/0.9290+ factor10*0.0955/0.9290
+{txt}
+{com}. 
+. 
+. 
+. 
+. *******************************************************************************
+. *Indicador IIa
+. 
+. *******************************************************************************
+. 
+. gen Indice2a = factor6a*0.4787/0.9290+ factor7a*0.1339/0.9290+ factor8a*0.1235/0.9290+ factor9a*0.0973/0.9290+ factor10a*0.0955/0.9290
+{txt}
+{com}. 
+.  
+.  
+. 
+.  log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\kleve\OneDrive\Área de Trabalho\Lucas\11 jul - 2022\fatores.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}29 Jul 2022, 14:45:01
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
