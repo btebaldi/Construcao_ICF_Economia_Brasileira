@@ -5,33 +5,34 @@ GitHub repository: Construcao_ICF_Economia_Brasileira
 
 Este repositório contém os materiais necessários para reprodução e extensão dos resultados apresentados no artigo aceito para publicação na revista *Economia Aplicada* ([https://revistas.usp.br/ecoa](https://revistas.usp.br/ecoa)):
 
-**Título:** *Construção de Um Índice de Condições Financeiras para a Economia Brasileira*
+**Título:** *Construção de Um Índice de Condições Financeiras para a Economia Brasileira*  
+**Data:** Agosto de 2025
 
 **Autores:**
 - Marcelo Kfoury Muinhos  
-Professor na EESP-FGV;  
+Doutor em Economia pela Universidade de Cornell nos EUA  
+Professor na Escola de Economia de São Paulo - FGV;  
 orcid: 0000-0002-0841-5644
 
-- Bruno Tebaldi Q. Barbosa
-Professor na EESP-FGV;
+- Bruno Tebaldi Q. Barbosa  
+Doutor em Economia pela Fundação Getulio Vargas    
+Professor na Escola de Economia de São Paulo - FGV;  
 orcid: 0000-0001-9638-5651
 
 - Lucas Pires Ferreira  
-Mestre em economia pela EESP-FGV.
-
-**Data:** Agosto de 2025
+Mestre em economia pela Fundação Getulio Vargas.
 
 ### Citatção
 
 Para citar este repositório, arquivos ou materiais associados, utilize o formato apresentado abaixo, adaptando conforme necessário para o contexto do seu trabalho. 
 
-Barbosa, B. T. (2025). Repositorio do artigo Construção de Um Índice de Condições Financeiras para a Economia Brasileira. https://github.com/btebaldi/Construcao_ICF_Economia_Brasileira.
+Barbosa, B. T. (2025). *Repositorio do artigo Construção de Um Índice de Condições Financeiras para a Economia Brasileira*. https://github.com/btebaldi/Construcao_ICF_Economia_Brasileira.
 
 > @misc{barbosa2025RepositoryICF,  
 author       = {Barbosa, Bruno Tebaldi},  
 title        = {Repositório do Artigo {Construção de Um Índice de Condições Financeiras para a Economia Brasileira}},  
 year         = {2025},  
-howpublished = {\url{https://github.com/btebaldi/Construcao_ICF_Economia_Brasileira}}
+howpublished = {\url{https://github.com/btebaldi/Construcao_ICF_Economia_Brasileira}}  
 }
 
 
